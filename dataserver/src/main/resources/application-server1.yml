@@ -1,0 +1,25 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: dataserver
+
+###############eureka 配置###############
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://admin:123456@localhost:8081/eureka
+  instance:
+    prefer-ip-address: true # 使用ip注册，不使用主机名
+    # 新版应该是spring.cloud.client.ip-address  @project.version@为项目版本号
+    # 使用随机值确保实例唯一 ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@
+
+###############actuator 配置###############
+#actuator 2.0版本变动 https://blog.csdn.net/alinyua/article/details/80009435
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 暴露所有端点，注意 * 要加双引号
